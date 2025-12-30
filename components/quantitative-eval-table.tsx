@@ -187,7 +187,7 @@ export function QuantitativeEvalTable() {
   ]
 
   return (
-    <section className="py-24 px-6 max-w-6xl mx-auto">
+    <section className="pt-12 pb-12 px-6 max-w-6xl mx-auto">
       <h2 className="text-3xl font-bold mb-12 text-center">Quantitative Comparison</h2>
       <div className="glass-panel overflow-hidden border border-border">
         <Table>

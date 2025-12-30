@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState,useMemo } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const EXAMPLES = [
@@ -95,6 +95,45 @@ const EXAMPLES = [
     edit_prompt: "a cat hanging from a wire with grass in the background"
   }
 ]
+function DiffHighlight({ 
+  source, 
+  target, 
+  type = "added" 
+}: { 
+  source: string; 
+  target: string; 
+  type?: "added" | "removed" 
+}) {
+  const sourceWords = useMemo(() => 
+    source.toLowerCase().replace(/[.,]/g, "").split(/\s+/), 
+    [source]
+  );
+  
+  const targetWords = target.split(/\s+/);
+
+  return (
+    <>
+      {targetWords.map((word, i) => {
+        const cleanWord = word.toLowerCase().replace(/[.,]/g, "");
+        const isDifferent = !sourceWords.includes(cleanWord);
+
+        return (
+          <span 
+            key={i} 
+            className={isDifferent 
+              ? type === "added" 
+                ? "bg-accent/20 text-accent px-0.5 rounded font-bold underline decoration-accent/30" 
+                : "text-muted-foreground/60 line-through decoration-red-500/50"
+              : ""
+            }
+          >
+            {word}{" "}
+          </span>
+        );
+      })}
+    </>
+  );
+}
 
 export function ExampleGallery() {
   const [index, setIndex] = useState(0)
@@ -102,85 +141,91 @@ export function ExampleGallery() {
   const next = () => setIndex((i) => (i + 1) % EXAMPLES.length)
   const prev = () => setIndex((i) => (i - 1 + EXAMPLES.length) % EXAMPLES.length)
 
+  const current = EXAMPLES[index];
+
   return (
-    <section className="py-24 px-6 max-w-5xl mx-auto">
-      <h2 className="text-3xl font-bold mb-12 text-center text-foreground">Qualitative Examples</h2>
-      
-      <div className="relative glass-panel p-6 md:p-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
+    <section className="py-20 px-6 max-w-6xl mx-auto">
+      <div className="relative">
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-14 items-start px-8 md:px-20">
           
-          <div className="flex flex-col items-center">
-            <div className="w-full max-w-xs mx-auto aspect-square bg-muted rounded-lg overflow-hidden border border-border relative">
+
+          <div className="flex flex-col items-center w-full">
+            <div className="w-full max-w-sm aspect-square rounded-[1.5rem] overflow-hidden relative shadow-xl border border-border group">
               <img
-                src={EXAMPLES[index].input || "/placeholder.svg"}
-                alt="Input"
-                className="w-full h-full object-cover transition-opacity duration-300"
+                src={current.input}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                alt="Original"
               />
-              <div className="absolute top-2 left-2 px-2 py-1 bg-background/80 backdrop-blur-md rounded text-xs font-mono border border-border">
-                INPUT
+              <div className="absolute top-4 left-4 text-[9px] font-black tracking-widest text-muted-foreground/70 bg-background/90 px-2.5 py-1 rounded-full backdrop-blur-md border border-border">
+                BEFORE
               </div>
             </div>
-            <div className="mt-3 w-full max-w-xs">
-              <div className="h-20 overflow-y-auto mt-2 px-2">
-             
-                <p className="text-sm text-foreground text-center leading-relaxed">
-                  "{EXAMPLES[index].src_prompt}"
-                </p>
-              </div>
+            <div className="mt-8 text-center px-2">
+               <p className="text-base md:text-lg leading-relaxed text-foreground/70 italic">
+                 <DiffHighlight source={current.edit_prompt} target={current.src_prompt} type="removed" />
+               </p>
             </div>
           </div>
 
-          <div className="flex flex-col items-center">
-            <div className="w-full max-w-xs mx-auto aspect-square bg-muted rounded-lg overflow-hidden border border-border relative">
+     
+          <div className="flex flex-col items-center w-full">
+            <div className="w-full max-w-sm aspect-square rounded-[1.5rem] overflow-hidden relative shadow-xl border border-accent/20 group">
               <img
-                src={EXAMPLES[index].output || "/placeholder.svg"}
+                src={current.output}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 alt="Edited"
-                className="w-full h-full object-cover transition-opacity duration-300"
               />
-              <div className="absolute top-2 left-2 px-2 py-1 bg-accent/80 text-white backdrop-blur-md rounded text-xs font-mono border border-accent/20">
-                EDITED
+              <div className="absolute top-4 left-4 text-[9px] font-black tracking-widest text-accent bg-accent/10 px-2.5 py-1 rounded-full backdrop-blur-md border border-accent/20">
+                AFTER
               </div>
             </div>
-            <div className="mt-3 w-full max-w-xs">
-              <div className="h-20 overflow-y-auto mt-2 px-2">
-                <p className="text-sm text-accent text-center font-medium leading-relaxed">
-                  "{EXAMPLES[index].edit_prompt}"
-                </p>
-              </div>
+            <div className="mt-8 text-center px-2">
+               <p className="text-base md:text-lg leading-relaxed font-semibold text-foreground">
+                  <DiffHighlight source={current.src_prompt} target={current.edit_prompt} type="added" />
+               </p>
             </div>
           </div>
         </div>
 
-        <button
-          onClick={prev}
-          className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center rounded-full 
-                     bg-background/60 hover:bg-background/90 transition-all border border-border backdrop-blur-sm
-                     active:scale-90 active:bg-accent/10"
-          aria-label="Previous Example"
-        >
-          <ChevronLeft className="text-foreground" />
-        </button>
+      
+        <div className="absolute inset-y-0 -left-2 md:-left-4 flex items-center">
+          <button
+            onClick={prev}
+            className="w-12 h-12 flex items-center justify-center rounded-xl bg-accent text-white shadow-lg hover:scale-105 active:scale-90 transition-all z-30 border border-white/20"
+            aria-label="Previous"
+          >
+            <ChevronLeft size={28} strokeWidth={2.5} />
+          </button>
+        </div>
         
-        <button
-          onClick={next}
-          className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center rounded-full 
-                     bg-background/60 hover:bg-background/90 transition-all border border-border backdrop-blur-sm
-                     active:scale-90 active:bg-accent/10"
-          aria-label="Next Example"
-        >
-          <ChevronRight className="text-foreground" />
-        </button>
+        <div className="absolute inset-y-0 -right-2 md:-right-4 flex items-center">
+          <button
+            onClick={next}
+            className="w-12 h-12 flex items-center justify-center rounded-xl bg-accent text-white shadow-lg hover:scale-105 active:scale-90 transition-all z-30 border border-white/20"
+            aria-label="Next"
+          >
+            <ChevronRight size={28} strokeWidth={2.5} />
+          </button>
+        </div>
+      </div>
 
-        <div className="flex justify-center gap-2 mt-8">
+
+      <div className="mt-16 flex flex-col items-center gap-4">
+        <div className="flex gap-1.5 items-center">
           {EXAMPLES.map((_, i) => (
-            <div
+            <button
               key={i}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                i === index ? "bg-accent w-6" : "bg-muted-foreground/30"
+              onClick={() => setIndex(i)}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                i === index ? "bg-accent w-10" : "bg-muted-foreground/15 w-2 hover:bg-accent/20"
               }`}
             />
           ))}
         </div>
+        <span className="text-[10px] font-bold font-mono text-muted-foreground/50 tracking-widest">
+          SAMPLE {index + 1} OF {EXAMPLES.length}
+        </span>
       </div>
     </section>
   )

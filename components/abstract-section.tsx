@@ -2,11 +2,10 @@ import React from 'react';
 
 export function AbstractSection() {
   return (
-    <section className="py-24 px-6 max-w-4xl mx-auto">
-      {/* text-foreground ensures the heading is crisp in Light Mode */}
+    <section className="pt-12 pb-12 px-6 max-w-4xl mx-auto">
       <h2 className="text-3xl font-bold mb-8 text-center text-foreground">Abstract</h2>
       
-      {/* glass-panel for the background, text-muted-foreground for body text contrast */}
+     
       <div className="glass-panel p-8 md:p-12 leading-relaxed text-lg text-muted-foreground">
         <p className="text-justify">
           Instruction-guided image editing has advanced rapidly with large multimodal generative models, 
