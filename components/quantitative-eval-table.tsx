@@ -186,6 +186,56 @@ export function QuantitativeEvalTable() {
     },
   ]
 
+  const inferenceTimeData = [
+    { testCase: "Test 1", ours: 24.3, nano: 33.0, gpt15: 38.7, gpt1: 32.0, qwenImage: 58.2, flux1: 23.0 },
+    { testCase: "Test 2", ours: 15.6, nano: 30.4, gpt15: 36.6, gpt1: 43.2, qwenImage: 60.7, flux1: 13.4 },
+    { testCase: "Test 3", ours: 14.9, nano: 32.6, gpt15: 40.4, gpt1: 39.1, qwenImage: 68.9, flux1: 11.0 },
+    { testCase: "Test 4", ours: 14.1, nano: 29.2, gpt15: 28.9, gpt1: 36.4, qwenImage: 59.8, flux1: 25.4 },
+    { testCase: "Test 5", ours: 16.2, nano: 32.7, gpt15: 29.8, gpt1: 42.3, qwenImage: 77.8, flux1: 19.4 },
+    { testCase: "Test 6", ours: 14.7, nano: 32.6, gpt15: 32.5, gpt1: 42.8, qwenImage: 91.6, flux1: 19.4 },
+    { testCase: "Test 7", ours: 14.8, nano: 29.4, gpt15: 35.1, gpt1: 51.5, qwenImage: 59.4, flux1: 19.7 },
+    { testCase: "Test 8", ours: 14.3, nano: 30.8, gpt15: 66.9, gpt1: 52.4, qwenImage: 57.6, flux1: 19.4 },
+    { testCase: "Test 9", ours: 14.4, nano: 33.4, gpt15: 66.8, gpt1: 42.7, qwenImage: 143.4, flux1: 28.5 },
+    { testCase: "Test 10", ours: 14.6, nano: 33.8, gpt15: 38.5, gpt1: 39.1, qwenImage: 144.3, flux1: 24.3 },
+    { testCase: "Test 11", ours: 14.1, nano: 30.8, gpt15: 34.3, gpt1: 38.9, qwenImage: 226.4, flux1: 24.1 },
+    { testCase: "Test 12", ours: 14.6, nano: 35.9, gpt15: 37.8, gpt1: 35.8, qwenImage: 109.1, flux1: 23.8 },
+    { testCase: "Test 13", ours: 13.9, nano: 28.7, gpt15: 32.9, gpt1: 46.7, qwenImage: 175.8, flux1: 25.6 },
+    { testCase: "Test 14", ours: 14.4, nano: 32.1, gpt15: 36.1, gpt1: 44.9, qwenImage: 63.1, flux1: 24.2 },
+    { testCase: "Test 15", ours: 14.2, nano: 26.9, gpt15: 33.5, gpt1: 39.9, qwenImage: 148.3, flux1: 24.9 },
+    { testCase: "Test 16", ours: 14.2, nano: 27.1, gpt15: 35.0, gpt1: 41.1, qwenImage: 59.3, flux1: 25.7 },
+    { testCase: "Test 17", ours: 14.3, nano: 27.7, gpt15: 32.9, gpt1: 36.3, qwenImage: 67.5, flux1: 28.1 },
+  ]
+
+  const avgInferenceTime = {
+    ours: 15.15,
+    nano: 31.01,
+    gpt15: 38.63,
+    gpt1: 41.48,
+    qwenImage: 98.31,
+    flux1: 22.35,
+  }
+
+  const metrics = [
+    "add",
+    "adjust",
+    "extract",
+    "replace",
+    "remove",
+    "background",
+    "style",
+    "hybrid",
+    "action",
+    "overall",
+  ] as const
+
+  const maxByMetric = metrics.reduce(
+    (acc, metric) => {
+      acc[metric] = Math.max(...data.map((row) => row[metric]))
+      return acc
+    },
+    {} as Record<(typeof metrics)[number], number>
+  )
+
   return (
     <section className="pt-12 pb-12 px-6 max-w-6xl mx-auto">
       <h2 className="text-3xl font-bold mb-12 text-center">Quantitative Comparison</h2>
@@ -203,7 +253,7 @@ export function QuantitativeEvalTable() {
               <TableHead className="text-center font-bold text-foreground">Style</TableHead>
               <TableHead className="text-center font-bold text-foreground">Hybrid</TableHead>
               <TableHead className="text-center font-bold text-foreground">Action</TableHead>
-              <TableHead className="text-center font-bold text-foreground">Overall†</TableHead>
+              <TableHead className="text-center font-bold text-foreground">Overall</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -212,21 +262,63 @@ export function QuantitativeEvalTable() {
                 key={row.model}
                 className={`
                   hover:bg-muted/30 transition-colors
-                  ${row.model === "Our pipeline" ? "bg-accent/5 font-bold" : ""}
+                  ${row.model === "Our pipeline" ? "bg-accent/5" : ""}
                   ${idx === data.length - 1 ? "border-t-2 border-foreground/20" : ""}
                 `}
               >
                 <TableCell className="font-medium">{row.model}</TableCell>
-                <TableCell className="text-center">{row.add.toFixed(2)}</TableCell>
-                <TableCell className="text-center">{row.adjust.toFixed(2)}</TableCell>
-                <TableCell className="text-center">{row.extract.toFixed(2)}</TableCell>
-                <TableCell className="text-center">{row.replace.toFixed(2)}</TableCell>
-                <TableCell className="text-center">{row.remove.toFixed(2)}</TableCell>
-                <TableCell className="text-center">{row.background.toFixed(2)}</TableCell>
-                <TableCell className="text-center">{row.style.toFixed(2)}</TableCell>
-                <TableCell className="text-center">{row.hybrid.toFixed(2)}</TableCell>
-                <TableCell className="text-center">{row.action.toFixed(2)}</TableCell>
-                <TableCell className="text-center font-bold text-accent">{row.overall.toFixed(2)}</TableCell>
+                <TableCell
+                  className={`text-center ${row.add === maxByMetric.add ? "font-bold text-accent" : ""}`}
+                >
+                  {row.add.toFixed(2)}
+                </TableCell>
+                <TableCell
+                  className={`text-center ${row.adjust === maxByMetric.adjust ? "font-bold text-accent" : ""}`}
+                >
+                  {row.adjust.toFixed(2)}
+                </TableCell>
+                <TableCell
+                  className={`text-center ${row.extract === maxByMetric.extract ? "font-bold text-accent" : ""}`}
+                >
+                  {row.extract.toFixed(2)}
+                </TableCell>
+                <TableCell
+                  className={`text-center ${row.replace === maxByMetric.replace ? "font-bold text-accent" : ""}`}
+                >
+                  {row.replace.toFixed(2)}
+                </TableCell>
+                <TableCell
+                  className={`text-center ${row.remove === maxByMetric.remove ? "font-bold text-accent" : ""}`}
+                >
+                  {row.remove.toFixed(2)}
+                </TableCell>
+                <TableCell
+                  className={`text-center ${
+                    row.background === maxByMetric.background ? "font-bold text-accent" : ""
+                  }`}
+                >
+                  {row.background.toFixed(2)}
+                </TableCell>
+                <TableCell
+                  className={`text-center ${row.style === maxByMetric.style ? "font-bold text-accent" : ""}`}
+                >
+                  {row.style.toFixed(2)}
+                </TableCell>
+                <TableCell
+                  className={`text-center ${row.hybrid === maxByMetric.hybrid ? "font-bold text-accent" : ""}`}
+                >
+                  {row.hybrid.toFixed(2)}
+                </TableCell>
+                <TableCell
+                  className={`text-center ${row.action === maxByMetric.action ? "font-bold text-accent" : ""}`}
+                >
+                  {row.action.toFixed(2)}
+                </TableCell>
+                <TableCell
+                  className={`text-center ${row.overall === maxByMetric.overall ? "font-bold text-accent" : ""}`}
+                >
+                  {row.overall.toFixed(2)}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -234,6 +326,47 @@ export function QuantitativeEvalTable() {
       </div>
       <p className="mt-4 text-sm text-muted-foreground text-center">
         Table 1: Quantitative comparison of instruction-guided image editing across various semantic tasks.
+      </p>
+
+      <div className="mt-12 glass-panel overflow-hidden border border-border text-sm [&_th]:py-2 [&_td]:py-2 [&_th]:h-auto [&_td]:h-auto">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/50 hover:bg-muted/50">
+              <TableHead className="font-bold text-foreground">Test Case</TableHead>
+              <TableHead className="text-center font-bold text-foreground">OURS</TableHead>
+              <TableHead className="text-center font-bold text-foreground">NANO</TableHead>
+              <TableHead className="text-center font-bold text-foreground">GPT-1.5</TableHead>
+              <TableHead className="text-center font-bold text-foreground">GPT-1</TableHead>
+              <TableHead className="text-center font-bold text-foreground">QWEN-IMAGE</TableHead>
+              <TableHead className="text-center font-bold text-foreground">FLUX.1</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {inferenceTimeData.map((row) => (
+              <TableRow key={row.testCase} className="hover:bg-muted/30 transition-colors">
+                <TableCell className="font-medium">{row.testCase}</TableCell>
+                <TableCell className="text-center">{row.ours.toFixed(1)}s</TableCell>
+                <TableCell className="text-center">{row.nano.toFixed(1)}s</TableCell>
+                <TableCell className="text-center">{row.gpt15.toFixed(1)}s</TableCell>
+                <TableCell className="text-center">{row.gpt1.toFixed(1)}s</TableCell>
+                <TableCell className="text-center">{row.qwenImage.toFixed(1)}s</TableCell>
+                <TableCell className="text-center">{row.flux1.toFixed(1)}s</TableCell>
+              </TableRow>
+            ))}
+            <TableRow className="border-t-2 border-foreground/20">
+              <TableCell className="font-bold">Avg Time</TableCell>
+              <TableCell className="text-center font-bold">{avgInferenceTime.ours.toFixed(2)}s</TableCell>
+              <TableCell className="text-center font-bold">{avgInferenceTime.nano.toFixed(2)}s</TableCell>
+              <TableCell className="text-center font-bold">{avgInferenceTime.gpt15.toFixed(2)}s</TableCell>
+              <TableCell className="text-center font-bold">{avgInferenceTime.gpt1.toFixed(2)}s</TableCell>
+              <TableCell className="text-center font-bold">{avgInferenceTime.qwenImage.toFixed(2)}s</TableCell>
+              <TableCell className="text-center font-bold">{avgInferenceTime.flux1.toFixed(2)}s</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+      <p className="mt-4 text-sm text-muted-foreground text-center">
+        Table 5.2: Comparison of Inference Times across Models
       </p>
     </section>
   )

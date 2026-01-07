@@ -52,7 +52,7 @@
     "prompt": "Test 13: Make the human wear a Nhat Binh outfit, styled as a oil painting style with visible brushstrokes and a rich, dark canvas texture."
   },
   "014": {
-    "id": "08.jpg", (44,9)
+    "id": "08.jpg", (44,9s)
     "prompt": "Test 14: Make the human wear a Nhat Binh outfit, rendered in a modern 3D Disney style with soft, rounded features and subsurface scattering on the skin."
   },
   "015": {

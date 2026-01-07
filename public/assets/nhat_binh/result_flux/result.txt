@@ -1,6 +1,6 @@
 {
   "001": {
-    "id": "01.jpg",  (23,0)
+    "id": "01.jpg",  (23,0s)
     "prompt": "Test 1: Make the human wear a Nhat Binh outfit"
   },
   "002": {

@@ -35,12 +35,12 @@ export function InteractiveSandbox() {
       let endpoint = ''
 
       if (modelType === 'Standard') {
-        endpoint = 'https://zezf7crb7caxn6-8000.proxy.runpod.net/edit'
+        endpoint = 'https://j6stsk3s97zkds-8000.proxy.runpod.net/edit'
         formData.append('image', blob)
         formData.append('positive_prompt', prompt)
         if (negativePrompt) formData.append('negative_prompt', negativePrompt)
       } else {
-        endpoint = 'http://localhost:8387/edit'
+        endpoint = 'https://j6stsk3s97zkds-8000.proxy.runpod.net/edit'
         formData.append('file', blob)
         formData.append('src_p', negativePrompt || 'a photo')
         formData.append('edit_p', prompt)
