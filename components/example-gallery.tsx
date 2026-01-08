@@ -264,12 +264,14 @@ export function ExampleGallery() {
         </span>
       </div>
 
-      {/* Preload next and previous images */}
+      {/* Preload all images */}
       <div aria-hidden="true" className="hidden">
-        <img src={EXAMPLES[(index + 1) % EXAMPLES.length].input} alt="" />
-        <img src={EXAMPLES[(index + 1) % EXAMPLES.length].output} alt="" />
-        <img src={EXAMPLES[(index - 1 + EXAMPLES.length) % EXAMPLES.length].input} alt="" />
-        <img src={EXAMPLES[(index - 1 + EXAMPLES.length) % EXAMPLES.length].output} alt="" />
+        {EXAMPLES.map((ex, i) => (
+          <div key={i}>
+            <img src={ex.input} alt="" />
+            <img src={ex.output} alt="" />
+          </div>
+        ))}
       </div>
     </section>
   )
