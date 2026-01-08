@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from 'react' 
+import React, { useEffect, useState } from 'react'
 import { Database, X, Maximize2 } from "lucide-react"
 
 type ImageItem = {
@@ -36,7 +36,7 @@ export function EvalTable() {
       try {
         const response = await fetch('/assets/nhat_binh/result_be/result.txt')
         const text = await response.text()
-        
+
         const processedData = parseResultFile(text)
         processedData.sort((a, b) => parseInt(a.id) - parseInt(b.id))
 
@@ -56,33 +56,33 @@ export function EvalTable() {
         setLoading(false)
       }
     }
-    
+
     const parseResultFile = (text: string): ImageItem[] => {
       const items: ImageItem[] = []
       const testCaseRegex = /"(\d+)":\s*\{\s*"id":\s*"([^"]+)"\s*,\s*\(([\d,.]+)s\)\s*"prompt":\s*"([^"]+)"\s*\}/g
-      
+
       let match
       while ((match = testCaseRegex.exec(text)) !== null) {
         const [, testId, imageId, timeStr, prompt] = match
         const inferenceTime = parseFloat(timeStr.replace(',', '.'))
-        
+
         items.push({
           id: testId.padStart(3, '0'),
           imageId: imageId.split('.')[0],
           prompt,
-          inferenceTimes: { 'result_be': inferenceTime } 
+          inferenceTimes: { 'result_be': inferenceTime }
         })
       }
       return items
     }
 
     const fetchInferenceTimes = async (folder: string, data: ImageItem[]) => {
-      if (folder === 'result_be') return 
+      if (folder === 'result_be') return
       try {
         const response = await fetch(`/assets/nhat_binh/${folder}/result.txt`)
         const text = await response.text()
         const testTimeRegex = /"(\d+)":\s*\{\s*"id":\s*"[^"]+"\s*,\s*\(([\d,.]+)s\)/g
-        
+
         let timeMatch
         while ((timeMatch = testTimeRegex.exec(text)) !== null) {
           const [, testId, timeStr] = timeMatch
@@ -112,7 +112,7 @@ export function EvalTable() {
   }, [])
 
   const getFileExtension = (folder: string) => {
-    if (folder === 'result_be' || folder === 'result_gpt_1.5' || folder === 'result_gpt_1') return 'png'
+    if (folder === 'result_be' || folder === 'result_gpt_1.5' || folder === 'result_gpt_1') return 'jpg'
     if (folder === 'result_qwen_edit_2509' || folder === 'result_flux') return 'webp'
     return 'jpg'
   }
@@ -120,19 +120,19 @@ export function EvalTable() {
   const getImagePath = (model: ModelInfo, item: ImageItem) => {
     const folder = model.folder
     const extension = getFileExtension(folder)
-    
+
     if (folder === 'dataset') {
       return `/assets/nhat_binh/${folder}/${item.imageId}.jpg`
     }
     const numericalId = parseInt(item.id, 10)
-    
+
     if (folder === 'result_flux') {
       if (numericalId === 2) return `/assets/nhat_binh/${folder}/flux2.jpg`
       if (numericalId === 3) return `/assets/nhat_binh/${folder}/flux_03.jpg`
       const testId = numericalId < 10 ? item.id.slice(-2) : numericalId.toString()
       return `/assets/nhat_binh/${folder}/${testId}.${extension}`
     }
-    
+
     const testId = numericalId < 10 ? item.id.slice(-2) : numericalId.toString()
     return `/assets/nhat_binh/${folder}/${testId}.${extension}`
   }
@@ -148,7 +148,7 @@ export function EvalTable() {
   return (
     <section className="pt-12 pb-12 px-6 max-w-7xl mx-auto overflow-hidden">
       <h2 className="text-3xl font-bold mb-12 text-center text-foreground">Nhat Binh Outfit Editing Evaluation</h2>
-      
+
       <div className="glass-panel overflow-hidden border border-border">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
@@ -169,8 +169,8 @@ export function EvalTable() {
                       const imageSrc = getImagePath(model, item);
                       return (
                         <td key={model.id} className="p-3 align-top">
-                        
-                          <div 
+
+                          <div
                             className="aspect-square bg-muted/20 rounded-lg overflow-hidden mb-2 border border-border flex items-center justify-center cursor-pointer group/img relative"
                             onClick={() => setSelectedImage(imageSrc)}
                           >
@@ -179,12 +179,12 @@ export function EvalTable() {
                               alt={`${model.id} result`}
                               className="w-full h-full object-contain transition-transform duration-300 group-hover/img:scale-105"
                             />
-                            
+
                             <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
                               <Maximize2 className="text-white" size={24} />
                             </div>
                           </div>
-                          
+
                           <div className="flex flex-col items-center">
                             {idx > 0 && (
                               <span className="text-[9px] font-mono text-muted-foreground uppercase opacity-70 tracking-tighter">Inference</span>
@@ -216,19 +216,19 @@ export function EvalTable() {
           </table>
         </div>
       </div>
-      
+
       <div className="mt-8 flex justify-center items-center gap-2 text-xs font-mono text-muted-foreground">
         <Database size={14} />
         <span>Full dataset visualization optimized for high-fidelity cultural garment analysis.</span>
       </div>
 
-      
+
       {selectedImage && (
-        <div 
+        <div
           className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300"
           onClick={() => setSelectedImage(null)}
         >
-          <button 
+          <button
             className="absolute top-6 right-6 text-white/70 hover:text-white p-2 transition-colors z-50"
             onClick={(e) => {
               e.stopPropagation();
@@ -237,10 +237,10 @@ export function EvalTable() {
           >
             <X size={40} strokeWidth={1.5} />
           </button>
-          
-          <div 
+
+          <div
             className="relative max-w-5xl max-h-[90vh] w-full h-full flex items-center justify-center"
-            onClick={(e) => e.stopPropagation()} 
+            onClick={(e) => e.stopPropagation()}
           >
             <img
               src={selectedImage}
