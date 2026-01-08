@@ -6,91 +6,91 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 const EXAMPLES = [
   {
     input: "/assets/pie_bench/image/image1.jpg",
-    output: "/assets/pie_bench/edited_result/edit1.png",
+    output: "/assets/pie_bench/edited_result/edit1.jpg",
     src_prompt: "a round cake with orange frosting on a wooden plate",
     edit_prompt: "a square cake with strawberry frosting on a plastic plate"
   },
   {
     input: "/assets/pie_bench/image/image4.jpg",
-    output: "/assets/pie_bench/edited_result/edit4.png",
+    output: "/assets/pie_bench/edited_result/edit4.jpg",
     src_prompt: "a cat sitting next to a mirror",
     edit_prompt: "a silver cat sculpture standing next to a mirror"
   },
   {
     input: "/assets/pie_bench/image/image2.jpg",
-    output: "/assets/pie_bench/edited_result/edit2.png",
+    output: "/assets/pie_bench/edited_result/edit2.jpg",
     src_prompt: "a cat sitting on a wooden chair",
     edit_prompt: "a red dog with flowers in mouth standing on a metal chair"
   },
   {
     input: "/assets/pie_bench/image/image.jpg",
-    output: "/assets/pie_bench/edited_result/edit0.png",
+    output: "/assets/pie_bench/edited_result/edit0.jpg",
     src_prompt: "a slanted mountain bicycle on the road in front of a building",
     edit_prompt: "a slanted rusty mountain motorcycle in front of a fence"
   },
   {
     input: "/assets/pie_bench/image/image3.jpg",
-    output: "/assets/pie_bench/edited_result/edit3.png",
+    output: "/assets/pie_bench/edited_result/edit3.jpg",
     src_prompt: "blue light, a black and white cat is playing with a flower",
     edit_prompt: "blue light, a black and white dog is playing with a yellow ball"
   },
   {
     input: "/assets/pie_bench/image/image6.jpg",
-    output: "/assets/pie_bench/edited_result/edit6.png",
+    output: "/assets/pie_bench/edited_result/edit6.jpg",
     src_prompt: "a cup of coffee with drawing of tulip putted on the wooden table",
     edit_prompt: "a yellow cup of milk with drawing of rose putted on the wooden table"
   },
   {
     input: "/assets/pie_bench/image/image7.jpg",
-    output: "/assets/pie_bench/edited_result/edit7.png",
+    output: "/assets/pie_bench/edited_result/edit7.jpg",
     src_prompt: "a german shepherd dog stands on the grass with mouth closed",
     edit_prompt: "a white german shepherd dog sits on the grass with big mouth opened"
   },
   {
     input: "/assets/pie_bench/image/image9.jpg",
-    output: "/assets/pie_bench/edited_result/edit9.png",
+    output: "/assets/pie_bench/edited_result/edit9.jpg",
     src_prompt: "a dog is laying down on a white background",
     edit_prompt: "Painting of a lion laying down on a blue background"
   },
   {
     input: "/assets/pie_bench/image/image28.jpg",
-    output: "/assets/pie_bench/edited_result/edit28.png",
+    output: "/assets/pie_bench/edited_result/edit28.jpg",
     src_prompt: "white flowers on a tree branch with blue sky background",
     edit_prompt: "Painting of red flowers on a tree branch with white background"
   },
   {
     input: "/assets/pie_bench/image/image26.jpg",
-    output: "/assets/pie_bench/edited_result/edit26.png",
+    output: "/assets/pie_bench/edited_result/edit26.jpg",
     src_prompt: "a yellow bird with a red beak sitting on a branch",
     edit_prompt: "a toy cat with a red fur sitting on a branch"
   },
   {
     input: "/assets/pie_bench/image/image27.jpg",
-    output: "/assets/pie_bench/edited_result/edit27.png",
+    output: "/assets/pie_bench/edited_result/edit27.jpg",
     src_prompt: "a opened eyes cat sitting on wooden floor",
     edit_prompt: "a closed eyes dog sitting on green grass"
   },
   {
     input: "/assets/pie_bench/image/image93.jpg",
-    output: "/assets/pie_bench/edited_result/edit93.png",
+    output: "/assets/pie_bench/edited_result/edit93.jpg",
     src_prompt: "a collie dog is sitting on a bed",
     edit_prompt: "a Garfield cat is sleeping on a sofa"
   },
   {
     input: "/assets/pie_bench/image/image94.jpg",
-    output: "/assets/pie_bench/edited_result/edit94.png",
+    output: "/assets/pie_bench/edited_result/edit94.jpg",
     src_prompt: "a cat is sitting on a red blanket",
     edit_prompt: "a cat is sleeping on a blue sweater"
   },
   {
     input: "/assets/pie_bench/image/image95.jpg",
-    output: "/assets/pie_bench/edited_result/edit95.png",
+    output: "/assets/pie_bench/edited_result/edit95.jpg",
     src_prompt: "a painting of a fairy with green wings holding a glowing jar",
     edit_prompt: "a painting of a fairy with purple wings holding a white crystal ball"
   },
   {
     input: "/assets/pie_bench/image/image98.jpg",
-    output: "/assets/pie_bench/edited_result/edit98.png",
+    output: "/assets/pie_bench/edited_result/edit98.jpg",
     src_prompt: "a light bulb hanging from a wire with sky in the background",
     edit_prompt: "a cat hanging from a wire with grass in the background"
   }
