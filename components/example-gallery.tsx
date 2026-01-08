@@ -263,6 +263,14 @@ export function ExampleGallery() {
           SAMPLE {index + 1} OF {EXAMPLES.length}
         </span>
       </div>
+
+      {/* Preload next and previous images */}
+      <div aria-hidden="true" className="hidden">
+        <img src={EXAMPLES[(index + 1) % EXAMPLES.length].input} alt="" />
+        <img src={EXAMPLES[(index + 1) % EXAMPLES.length].output} alt="" />
+        <img src={EXAMPLES[(index - 1 + EXAMPLES.length) % EXAMPLES.length].input} alt="" />
+        <img src={EXAMPLES[(index - 1 + EXAMPLES.length) % EXAMPLES.length].output} alt="" />
+      </div>
     </section>
   )
 }

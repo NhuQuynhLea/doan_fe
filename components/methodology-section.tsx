@@ -1,15 +1,28 @@
+"use client"
+
+import { useState } from "react"
+import { Maximize2, X } from "lucide-react"
+
 export function MethodologySection() {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
+
   return (
     <section className="pt-12 pb-12 px-6 max-w-5xl mx-auto">
       <h2 className="text-3xl font-bold mb-12 text-center">System Architecture</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
         <div className="space-y-8">
-          <div className="glass-panel p-4 bg-white/5">
+          <div
+            className="glass-panel p-4 bg-white/5 cursor-pointer group/img relative"
+            onClick={() => setSelectedImage("/assets/architecture_general.jpg")}
+          >
             <img
               src="/assets/architecture_general.jpg"
               alt="Development and Production System Architecture"
-              className="w-full rounded border border-white/10"
+              className="w-full rounded border border-white/10 transition-transform duration-300 group-hover/img:scale-[1.01]"
             />
+            <div className="absolute inset-0 bg-black/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center rounded">
+              <Maximize2 className="text-white" size={24} />
+            </div>
           </div>
           <p className="text-xs text-muted-foreground text-center font-mono italic">
             Figure 3.2: Overview of the Development Pipeline and Production Environment.
@@ -61,6 +74,34 @@ export function MethodologySection() {
           </div>
         </div>
       </div>
+
+      {selectedImage && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-300"
+          onClick={() => setSelectedImage(null)}
+        >
+          <button
+            className="absolute top-6 right-6 text-white/70 hover:text-white p-2 transition-colors z-50"
+            onClick={(e) => {
+              e.stopPropagation()
+              setSelectedImage(null)
+            }}
+          >
+            <X size={40} strokeWidth={1.5} />
+          </button>
+
+          <div
+            className="relative max-w-5xl max-h-[90vh] w-full h-full flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={selectedImage}
+              alt="Expanded view"
+              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl animate-in zoom-in-95 duration-300"
+            />
+          </div>
+        </div>
+      )}
     </section>
   )
 }

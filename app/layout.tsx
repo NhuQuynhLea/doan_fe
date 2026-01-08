@@ -10,21 +10,21 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "v0 App",
-  description: "Created with v0",
+  title: "Image Editor",
+  description: "Image Editor",
   generator: "v0.app",
   icons: {
     icon: [
+      // {
+      //   url: "/icon-light-32x32.png",
+      //   media: "(prefers-color-scheme: light)",
+      // },
+      // {
+      //   url: "/icon-dark-32x32.png",
+      //   media: "(prefers-color-scheme: dark)",
+      // },
       {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
+        url: "/circle-ptit-2.jpg",
         type: "image/svg+xml",
       },
     ],
@@ -40,13 +40,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans antialiased selection:bg-accent/30`}>
-      <AuthProvider>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
-          {children}
-        </ThemeProvider>
-        <Analytics />
-      </AuthProvider> 
-       
+        <AuthProvider>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+            {children}
+          </ThemeProvider>
+          <Analytics />
+        </AuthProvider>
+
       </body>
     </html>
   )
