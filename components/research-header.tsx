@@ -96,15 +96,30 @@ export function ResearchHeader() {
       </div>
 
       <div className="flex flex-wrap justify-center gap-4">
-        <button className="btn-outline flex items-center gap-2 px-6 py-2.5 border-red-500/20 text-red-600 hover:bg-red-50 transition-all font-bold">
+        <a
+          href="https://drive.google.com/file/d/1Pk0xeJBA7fYdZYifCVF2tKjv1jEBcwks/view"
+          target="_blank"
+          rel="noreferrer"
+          className="btn-outline flex items-center gap-2 px-6 py-2.5 border-red-500/20 text-red-600 hover:bg-red-50 transition-all font-bold"
+        >
           <FileText size={18} /> Paper
-        </button>
-        <button className="btn-outline flex items-center gap-2 px-6 py-2.5 border-slate-500/20 text-slate-700 hover:bg-slate-50 transition-all font-bold">
+        </a>
+        <a
+          href="https://github.com/linhtran6065/DoAn-Qwen-Backend/tree/main"
+          target="_blank"
+          rel="noreferrer"
+          className="btn-outline flex items-center gap-2 px-6 py-2.5 border-slate-500/20 text-slate-700 hover:bg-slate-50 transition-all font-bold"
+        >
           <Github size={18} /> Code
-        </button>
-        <button className="btn-outline flex items-center gap-2 px-6 py-2.5 border-amber-500/20 text-amber-600 hover:bg-amber-50 transition-all font-bold">
+        </a>
+        <a
+          href="https://github.com/Zero-zx/dataset_nhat_binh"
+          target="_blank"
+          rel="noreferrer"
+          className="btn-outline flex items-center gap-2 px-6 py-2.5 border-amber-500/20 text-amber-600 hover:bg-amber-50 transition-all font-bold"
+        >
           <Database size={18} /> Dataset
-        </button>
+        </a>
       </div>
 
       <AuthModal isOpen={modalType !== null} onClose={() => setModalType(null)} type={modalType || "login"} />

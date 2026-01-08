@@ -12,7 +12,7 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "Image Editor",
   description: "Image Editor",
-  generator: "v0.app",
+  // generator: "v0.app",
   icons: {
     icon: [
       // {
