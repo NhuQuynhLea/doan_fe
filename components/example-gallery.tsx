@@ -1,6 +1,6 @@
 "use client"
 
-import { useState,useMemo } from "react"
+import { useState, useMemo } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const EXAMPLES = [
@@ -95,20 +95,20 @@ const EXAMPLES = [
     edit_prompt: "a cat hanging from a wire with grass in the background"
   }
 ]
-function DiffHighlight({ 
-  source, 
-  target, 
-  type = "added" 
-}: { 
-  source: string; 
-  target: string; 
-  type?: "added" | "removed" 
+function DiffHighlight({
+  source,
+  target,
+  type = "added"
+}: {
+  source: string;
+  target: string;
+  type?: "added" | "removed"
 }) {
-  const sourceWords = useMemo(() => 
-    source.toLowerCase().replace(/[.,]/g, "").split(/\s+/), 
+  const sourceWords = useMemo(() =>
+    source.toLowerCase().replace(/[.,]/g, "").split(/\s+/),
     [source]
   );
-  
+
   const targetWords = target.split(/\s+/);
 
   return (
@@ -118,11 +118,11 @@ function DiffHighlight({
         const isDifferent = !sourceWords.includes(cleanWord);
 
         return (
-          <span 
-            key={i} 
-            className={isDifferent 
-              ? type === "added" 
-                ? "bg-accent/20 text-accent px-0.5 rounded font-bold underline decoration-accent/30" 
+          <span
+            key={i}
+            className={isDifferent
+              ? type === "added"
+                ? "bg-accent/20 text-accent px-0.5 rounded font-bold underline decoration-accent/30"
                 : "text-muted-foreground/60 line-through decoration-red-500/50"
               : ""
             }
@@ -135,60 +135,97 @@ function DiffHighlight({
   );
 }
 
+import { Skeleton } from "@/components/ui/skeleton"
+
 export function ExampleGallery() {
   const [index, setIndex] = useState(0)
+  const [imagesLoaded, setImagesLoaded] = useState([false, false])
 
-  const next = () => setIndex((i) => (i + 1) % EXAMPLES.length)
-  const prev = () => setIndex((i) => (i - 1 + EXAMPLES.length) % EXAMPLES.length)
+  const setIndexAndReset = (newIndex: number) => {
+    setImagesLoaded([false, false])
+    setIndex(newIndex)
+  }
+
+  const next = () => setIndexAndReset((index + 1) % EXAMPLES.length)
+  const prev = () => setIndexAndReset((index - 1 + EXAMPLES.length) % EXAMPLES.length)
 
   const current = EXAMPLES[index];
+
+  const handleImageLoad = (imgIndex: number) => {
+    setImagesLoaded(prev => {
+      if (prev[imgIndex]) return prev
+      const newState = [...prev]
+      newState[imgIndex] = true
+      return newState
+    })
+  }
+
+  const allImagesLoaded = imagesLoaded[0] && imagesLoaded[1]
 
   return (
     <section className="py-20 px-6 max-w-6xl mx-auto">
       <div className="relative">
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-14 items-start px-8 md:px-20">
-          
+
 
           <div className="flex flex-col items-center w-full">
-            <div className="w-full max-w-sm aspect-square rounded-[1.5rem] overflow-hidden relative shadow-xl border border-border group">
+            <div className="w-full max-w-sm aspect-square rounded-[1.5rem] overflow-hidden relative shadow-xl border border-border group bg-muted/20">
+              {!allImagesLoaded && (
+                <Skeleton className="absolute inset-0 w-full h-full rounded-[1.5rem]" />
+              )}
               <img
+                key={current.input}
                 src={current.input}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                ref={(node) => {
+                  if (node?.complete) handleImageLoad(0)
+                }}
+                onLoad={() => handleImageLoad(0)}
+                className={`w-full h-full object-cover transition-opacity duration-500 ${allImagesLoaded ? 'opacity-100 group-hover:scale-105 transition-transform' : 'opacity-0'
+                  }`}
                 alt="Original"
               />
               <div className="absolute top-4 left-4 text-[9px] font-black tracking-widest text-muted-foreground/70 bg-background/90 px-2.5 py-1 rounded-full backdrop-blur-md border border-border">
                 BEFORE
               </div>
             </div>
-            <div className="mt-8 text-center px-2">
-               <p className="text-base md:text-lg leading-relaxed text-foreground/70 italic">
-                 <DiffHighlight source={current.edit_prompt} target={current.src_prompt} type="removed" />
-               </p>
+            <div className={`mt-8 text-center px-2 transition-opacity duration-500 ${allImagesLoaded ? 'opacity-100' : 'opacity-0'}`}>
+              <p className="text-base md:text-lg leading-relaxed text-foreground/70 italic">
+                <DiffHighlight source={current.edit_prompt} target={current.src_prompt} type="removed" />
+              </p>
             </div>
           </div>
 
-     
+
           <div className="flex flex-col items-center w-full">
-            <div className="w-full max-w-sm aspect-square rounded-[1.5rem] overflow-hidden relative shadow-xl border border-accent/20 group">
+            <div className="w-full max-w-sm aspect-square rounded-[1.5rem] overflow-hidden relative shadow-xl border border-accent/20 group bg-muted/20">
+              {!allImagesLoaded && (
+                <Skeleton className="absolute inset-0 w-full h-full rounded-[1.5rem]" />
+              )}
               <img
+                key={current.output}
                 src={current.output}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                ref={(node) => {
+                  if (node?.complete) handleImageLoad(1)
+                }}
+                onLoad={() => handleImageLoad(1)}
+                className={`w-full h-full object-cover transition-opacity duration-500 ${allImagesLoaded ? 'opacity-100 group-hover:scale-105 transition-transform' : 'opacity-0'
+                  }`}
                 alt="Edited"
               />
               <div className="absolute top-4 left-4 text-[9px] font-black tracking-widest text-accent bg-accent/10 px-2.5 py-1 rounded-full backdrop-blur-md border border-accent/20">
                 AFTER
               </div>
             </div>
-            <div className="mt-8 text-center px-2">
-               <p className="text-base md:text-lg leading-relaxed font-semibold text-foreground">
-                  <DiffHighlight source={current.src_prompt} target={current.edit_prompt} type="added" />
-               </p>
+            <div className={`mt-8 text-center px-2 transition-opacity duration-500 ${allImagesLoaded ? 'opacity-100' : 'opacity-0'}`}>
+              <p className="text-base md:text-lg leading-relaxed font-semibold text-foreground">
+                <DiffHighlight source={current.src_prompt} target={current.edit_prompt} type="added" />
+              </p>
             </div>
           </div>
         </div>
 
-      
+
         <div className="absolute inset-y-0 -left-2 md:-left-4 flex items-center">
           <button
             onClick={prev}
@@ -198,7 +235,7 @@ export function ExampleGallery() {
             <ChevronLeft size={28} strokeWidth={2.5} />
           </button>
         </div>
-        
+
         <div className="absolute inset-y-0 -right-2 md:-right-4 flex items-center">
           <button
             onClick={next}
@@ -216,10 +253,9 @@ export function ExampleGallery() {
           {EXAMPLES.map((_, i) => (
             <button
               key={i}
-              onClick={() => setIndex(i)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                i === index ? "bg-accent w-10" : "bg-muted-foreground/15 w-2 hover:bg-accent/20"
-              }`}
+              onClick={() => setIndexAndReset(i)}
+              className={`h-1.5 rounded-full transition-all duration-300 ${i === index ? "bg-accent w-10" : "bg-muted-foreground/15 w-2 hover:bg-accent/20"
+                }`}
             />
           ))}
         </div>
