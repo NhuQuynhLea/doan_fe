@@ -35,7 +35,7 @@ export function InteractiveSandbox() {
       let endpoint = ''
 
       if (modelType === 'Standard') {
-        endpoint = 'https://j6stsk3s97zkds-8000.proxy.runpod.net/edit'
+        endpoint = 'https://h2kajmy8vgd5k3-8000.proxy.runpod.net/edit'
         formData.append('image', blob)
         formData.append('positive_prompt', prompt)
         if (negativePrompt) formData.append('negative_prompt', negativePrompt)
@@ -107,7 +107,7 @@ export function InteractiveSandbox() {
   return (
     <section className="pt-12 pb-12 px-6 bg-card/30 border-y border-border">
       <div className="max-w-6xl mx-auto">
-        
+
         <div className="mb-16">
           <h2 className="text-3xl font-bold mb-4">Try It Yourself</h2>
           <p className="text-muted-foreground max-w-xl">
@@ -116,7 +116,7 @@ export function InteractiveSandbox() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-6">
-          
+
           <div className="space-y-8">
             <div
               className="aspect-[4/3] glass-panel border-dashed border-2 flex items-center justify-center cursor-pointer hover:bg-muted/30 transition-colors relative overflow-hidden group p-4 rounded-2xl"
@@ -197,7 +197,7 @@ export function InteractiveSandbox() {
               )}
             </div>
 
-            
+
             <div className="space-y-3 pt-9">
               <button
                 onClick={handleGenerate}
@@ -226,7 +226,7 @@ export function InteractiveSandbox() {
               )}
             </div>
 
-            
+
           </div>
         </div>
 
